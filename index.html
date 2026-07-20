@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プログラミング実習II 期末試験 一夜漬け教科書</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#1d2433; --sub:#5b6478;
+    --line:#e3e8f0; --accent:#3b6ef5; --accent-d:#2350c8;
+    --predict:#2563eb; --predict-bg:#e8f0ff;
+    --write:#0f9d6b; --write-bg:#e4f7ef;
+    --code-bg:#1e2433; --code-ink:#e6ebf5; --code-cmt:#8ea0c0; --code-out:#7ee2b8;
+    --warn:#c2410c; --ok:#0f9d6b; --gold:#b45309; --gold-bg:#fff7ed;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif; line-height:1.78;}
+  .topbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.93);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+    padding:9px 16px; display:flex; align-items:center; gap:13px; flex-wrap:wrap;}
+  .topbar h1{font-size:14px; margin:0; font-weight:800; letter-spacing:.02em}
+  .countdown{font-size:13px; color:var(--warn); font-weight:800; white-space:nowrap}
+  .progwrap{flex:1; min-width:150px; display:flex; align-items:center; gap:8px}
+  .progbar{flex:1; height:9px; background:var(--line); border-radius:99px; overflow:hidden}
+  .progfill{height:100%; width:0%; background:linear-gradient(90deg,#3b6ef5,#0f9d6b); transition:width .3s}
+  .progtext{font-size:12px; color:var(--sub); white-space:nowrap}
+  .topbar button{font-size:12px; border:1px solid var(--line); background:#fff; color:var(--sub);
+    padding:5px 10px; border-radius:8px; cursor:pointer;}
+  .topbar button:hover{border-color:var(--accent); color:var(--accent)}
+  .layout{display:grid; grid-template-columns:240px minmax(0,1fr); gap:30px;
+    max-width:1120px; margin:0 auto; padding:20px 20px 140px;}
+  .sidebar{position:sticky; top:56px; align-self:start; max-height:calc(100vh - 74px); overflow:auto; padding-right:4px}
+  .toc-h{font-size:11px; font-weight:800; color:var(--sub); letter-spacing:.08em; margin:6px 0 8px}
+  .toc{display:flex; flex-direction:column; gap:1px}
+  .toc a{display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--ink);
+    font-size:13px; padding:7px 10px; border-radius:8px; border-left:3px solid transparent;}
+  .toc a:hover{background:#eef2fb}
+  .toc a.active{background:#eef2fb; color:var(--accent-d); font-weight:700; border-left-color:var(--accent)}
+  .toc .dot{width:8px; height:8px; border-radius:99px; flex:none; background:var(--line)}
+  .toc .p1{background:#ef4444} .toc .p2{background:#f59e0b} .toc .p3{background:#38bdf8}
+  .toc small{color:var(--sub); font-weight:600; font-size:10px}
+  .content{min-width:0}
+  .lead{color:var(--sub); font-size:14px; margin:2px 0 18px}
+  .sec-title{font-size:21px; margin:42px 0 4px; font-weight:800; display:flex; align-items:center; gap:10px; scroll-margin-top:64px; flex-wrap:wrap}
+  .sec-title:first-of-type{margin-top:10px}
+  .sec-title .pri{font-size:11px; font-weight:800; padding:3px 9px; border-radius:99px}
+  .pri.p1{background:#fde8e8; color:#b91c1c} .pri.p2{background:#fef3c7; color:#92400e} .pri.p3{background:#e0f2fe; color:#075985}
+  .sec-sub{color:var(--sub); font-size:13.5px; margin:0 0 16px}
+  .infobox{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 20px; margin-bottom:18px}
+  .infobox h2{font-size:15px; margin:0 0 10px; display:flex; align-items:center; gap:8px}
+  .infobox h2::before{content:""; width:4px; height:18px; background:var(--accent); border-radius:2px}
+  .infobox p{margin:8px 0; font-size:14px}
+  .infobox ul,.infobox ol{margin:8px 0; padding-left:22px; font-size:14px}
+  .infobox li{margin:5px 0}
+  .infobox b{color:var(--warn)}
+  .infobox .key{color:var(--accent-d); font-weight:700}
+  .infobox.cyg{border-color:#bcd0f7; background:#f7faff}
+  code{background:#eef2fb; padding:1px 6px; border-radius:5px; font-size:.9em;
+    font-family:"SF Mono",Menlo,Consolas,monospace}
+  .cheat{background:var(--gold-bg); border:1px solid #fed7aa; border-radius:14px; padding:14px 18px; margin-bottom:18px;}
+  .cheat h3{margin:0 0 8px; font-size:14px; color:var(--gold); display:flex; align-items:center; gap:7px}
+  .cheat ul{margin:0; padding-left:20px; font-size:13.5px}
+  .cheat li{margin:5px 0}
+  .cheat code{background:#fff; border:1px solid #fed7aa}
+  pre.code{background:var(--code-bg); color:var(--code-ink); padding:14px 16px; border-radius:10px;
+    overflow:auto; font-size:13.5px; line-height:1.6;
+    font-family:"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace; margin:10px 0;}
+  pre.code .c{color:var(--code-cmt)}
+  pre.code .o{color:var(--code-out)}
+  pre.code .b{color:#ffd479; font-weight:700}
+  .problem{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px 20px; margin-bottom:14px; box-shadow:0 1px 3px rgba(20,30,60,.04);}
+  .phead{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:10px}
+  .pno{font-weight:800; font-size:16px}
+  .chip{font-size:12px; padding:3px 10px; border-radius:99px; font-weight:600}
+  .chip.topic{background:#eef2fb; color:var(--sub); border:1px solid var(--line)}
+  .badge{font-size:11px; padding:3px 9px; border-radius:6px; font-weight:800; letter-spacing:.03em}
+  .badge.predict{background:var(--predict-bg); color:var(--predict)}
+  .badge.write{background:var(--write-bg); color:var(--write)}
+  .badge.hard{background:#fde8e8; color:#b91c1c}
+  .stmt{font-size:14.5px; margin:4px 0 10px}
+  .stmt ol,.stmt ul{margin:8px 0; padding-left:22px}
+  .stmt li{margin:3px 0}
+  .paper{font-size:12.5px; color:var(--write); background:var(--write-bg); border:1px dashed #86efac;
+    border-radius:8px; padding:7px 12px; margin:8px 0; display:flex; align-items:center; gap:7px}
+  .runhint{font-size:12px; color:var(--sub); margin:6px 0 0}
+  .runhint code{background:#eef2fb}
+  .reveal,.reveal-gotcha{margin-top:12px; margin-right:8px; font-size:13px; background:#fff;
+    border:1px solid var(--line); color:var(--accent); padding:7px 14px; border-radius:8px; cursor:pointer; font-weight:700;}
+  .reveal:hover{background:#eef2fb}
+  .reveal-gotcha{color:var(--gold); border-color:#fed7aa}
+  .reveal-gotcha:hover{background:var(--gold-bg)}
+  .solution{display:none; margin-top:14px; padding:14px 16px; border-left:3px solid var(--ok); background:#f3fbf7; border-radius:0 10px 10px 0}
+  .solution.show{display:block}
+  .solution h4{margin:0 0 8px; font-size:13px; color:var(--ok); letter-spacing:.03em}
+  .solution .out{font-weight:800; white-space:pre-wrap; font-family:"SF Mono",Menlo,Consolas,monospace; font-size:13px; background:#e4f7ef; padding:8px 12px; border-radius:8px; display:block; margin:6px 0}
+  .solution .explain{font-size:13.5px; margin-top:10px}
+  .solution .explain ul{padding-left:20px}
+  .solution code{background:#e4f7ef}
+  .gotcha{display:none; margin-top:12px; padding:14px 16px; border-left:3px solid var(--gold); background:var(--gold-bg); border-radius:0 10px 10px 0}
+  .gotcha.show{display:block}
+  .gotcha h4{margin:0 0 8px; font-size:13px; color:var(--gold)}
+  .gotcha code{background:#fff; border:1px solid #fed7aa}
+  .conf{display:flex; align-items:center; gap:6px; margin-top:14px; flex-wrap:wrap}
+  .conf-label{font-size:12px; color:var(--sub)}
+  .conf button{font-size:12px; border:1px solid var(--line); background:#fff; color:var(--sub);
+    padding:5px 12px; border-radius:99px; cursor:pointer; font-weight:600}
+  .conf button:hover{border-color:var(--accent)}
+  .conf button.active[data-v="ng"]{background:#fde8e8; color:#b91c1c; border-color:#fca5a5}
+  .conf button.active[data-v="maybe"]{background:#fef3c7; color:#92400e; border-color:#fcd34d}
+  .conf button.active[data-v="ok"]{background:var(--write-bg); color:var(--write); border-color:#86efac}
+  .miss{background:#fff5f5; border:1px solid #fecaca; border-radius:14px; padding:14px 18px; margin-bottom:18px}
+  .miss h3{margin:0 0 8px; font-size:14px; color:#b91c1c; display:flex; align-items:center; gap:7px}
+  .miss ul{margin:0; padding-left:20px; font-size:13.5px}
+  .miss li{margin:6px 0}
+  .miss code{background:#fff; border:1px solid #fecaca}
+  .miss .bad{color:#b91c1c; font-weight:700}
+  .miss .good{color:var(--ok); font-weight:700}
+  table.tbl{width:100%; border-collapse:collapse; font-size:13px; margin:10px 0; display:block; overflow-x:auto}
+  table.tbl th,table.tbl td{border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+  table.tbl thead th{background:#eef2fb; font-weight:700; white-space:nowrap}
+  table.tbl tbody th{background:#fbfcfe; font-weight:600; color:var(--sub); white-space:nowrap}
+  table.tbl code{background:#eef2fb}
+  @media(max-width:820px){
+    .layout{grid-template-columns:1fr; gap:14px}
+    .sidebar{position:static; max-height:none; border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:#fff}
+    .toc{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:2px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>🔥 プログラミング実習II 期末 一夜漬け教科書</h1>
+  <span class="countdown" id="countdown">⏳</span>
+  <div class="progwrap">
+    <div class="progbar"><div class="progfill" id="progfill"></div></div>
+    <span class="progtext" id="progtext">0 / 0 「OK」</span>
+  </div>
+  <button id="revealAll">全部の解答を表示</button>
+  <button id="resetBtn">記録リセット</button>
+</div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="toc-h">目次（試験範囲：教科書3〜6章）</div>
+    <nav class="toc" id="toc">
+      <a href="#intro"><span class="dot"></span>使い方＆試験の傾向</a>
+      <a href="#ch3"><span class="dot p2"></span>3章 変数と式 <small>S1</small></a>
+      <a href="#ch4a"><span class="dot p1"></span>4章 制御(1) 条件分岐 <small>S2</small></a>
+      <a href="#ch4b"><span class="dot p1"></span>4章 制御(2) ループ <small>S3</small></a>
+      <a href="#ch5"><span class="dot p1"></span>5章 関数 <small>S4</small></a>
+      <a href="#ch6"><span class="dot p3"></span>6章 配列 <small>S5</small></a>
+      <a href="#end"><span class="dot"></span>🏁 直前チェック</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+  <p class="lead">
+    出題元は<a href="https://cs.kwansei.ac.jp/prog2/problems/final_exam.html" target="_blank">期末試験・案内</a>と
+    TA予想問題集 <code>S1</code>〜<code>S5</code>。試験は<strong>持ち込み不可・筆記</strong>。範囲は教科書
+    <strong>3章 変数と式／4章 制御の流れ／5章 関数／6章 配列</strong>。
+    このページの全プログラムは<strong>この Mac で gcc コンパイル＋実行して出力を検証済み</strong>です。
+    <b>紙に書く練習</b>が本番の武器なので、作成問題は<strong>先に自分で紙に書いてから</strong>解答を開くこと。
+  </p>
+
+  <!-- ============ intro ============ -->
+  <h2 class="sec-title" id="intro">使い方＆試験の傾向</h2>
+  <div class="infobox cyg">
+    <h2>🎯 案内ページが名指しした「重点」</h2>
+    <ul>
+      <li><span class="key">変数</span>の意味を理解し適切に使えるか（型・整数割り算・オーバーフロー）</li>
+      <li><span class="key">条件分岐</span>（特に <code>if</code> / <code>if〜else</code> / <code>if〜else if〜else</code>）を正しく追えるか</li>
+      <li><span class="key">ループ</span>（特に <code>for</code> / <code>while</code>）を正しく<b>手で追える</b>か</li>
+      <li><span class="key">関数</span>（引数・戻り値・プロトタイプ宣言）を正しく扱えるか</li>
+      <li><span class="key">配列</span>（1次元・2次元・関数への受け渡し）を使えるか</li>
+    </ul>
+    <p style="margin-bottom:0"><b>出題形式（案内より）：</b>「与えられたプログラムの<u>期待される出力を正しく求める</u>」「<u>不足・誤りを正しく追加・修正する</u>」。引っかけ問題や細かい知識問題は出さない。だから<strong>トレース力＝1行ずつ手で追う力</strong>が命。</p>
+  </div>
+
+  <div class="cheat">
+    <h3>🪙 開始3秒前にリロードする反射（型で覚える）</h3>
+    <ul>
+      <li>入力 <code>scanf("%d", &amp;x);</code>（<b>&amp; を付ける</b>／配列は <code>scanf("%d", &amp;a[i]);</code>）・実数は <code>%lf</code></li>
+      <li>整数同士の割り算は<b>切り捨て</b>：<code>1/2 == 0</code>。実数が欲しければ <code>1.0/2</code> か <code>(double)a/b</code></li>
+      <li>for の型 <code>for(i=0; i&lt;n; i++){ ... }</code>／2重ループは内側 j を <code>i+1</code> から回すと重複ペア</li>
+      <li>関数は <b>プロトタイプ宣言</b>→<code>main</code>→<b>定義</b>。<code>int f(int a, int b){ return a+b; }</code></li>
+      <li>配列を関数に渡すのは <code>int array[]</code>、呼ぶ時は配列名だけ <code>f(a)</code>（<b>&amp; 不要</b>）</li>
+    </ul>
+  </div>
+
+  <!-- ================================================== -->
+  <!-- 3章 変数と式 -->
+  <!-- ================================================== -->
+  <h2 class="sec-title" id="ch3">3章 変数と式 <span class="pri p2">S1</span></h2>
+  <p class="sec-sub">狙われるのは①整数割り算の切り捨て ②scanf の書式（%d/%lf）と <code>&amp;</code> ③int のオーバーフロー ④インクリメント前置/後置。</p>
+
+  <div class="miss">
+    <h3>⚠️ ここで死ぬ人が多い落とし穴</h3>
+    <ul>
+      <li><code>1 / i</code> は <b>int ÷ int → 切り捨て</b>。i≥2 で 0 になる。実数和なら <code>1.0 / i</code>。</li>
+      <li>int を読むのは <code>%d</code>、double を読むのは <code>%lf</code>。<b>型と書式が食い違うと壊れる</b>。</li>
+      <li>後置 <code>x = a++;</code> は「<b>代入してから</b>増やす」／前置 <code>x = ++a;</code> は「<b>増やしてから</b>代入」。</li>
+      <li>文字は数：<code>'A'</code> は 65。<code>char c='f'-'F';</code> は 32（大文字↔小文字の差）。</li>
+    </ul>
+  </div>
+
+  <div class="problem" data-id="s1_1">
+    <div class="phead"><span class="pno">S1_1</span><span class="badge write">修正</span><span class="chip topic">整数割り算・scanf</span></div>
+    <div class="stmt">1 + 1/2 + 1/3 + … + 1/n を求めたいが、<b>バグが2つ</b>あって正しく出ない。2つのバグを直せ。さらに <code>(**)</code> の行を、変数 <code>result</code> 1つだけ・複合代入演算子で書き換えよ。</div>
+<pre class="code">#include &lt;stdio.h&gt;
+int main(void){
+    int i,n;
+    double result=0;
+    printf("Input n&gt;&gt;");
+    <span class="b">scanf("%lf",&amp;n);</span>              <span class="c">// ← あやしい(1)</span>
+    for( i = 1; i &lt;= n; i++ ){
+        result = result + ( <span class="b">1 / i</span> );  <span class="c">// (**) ← あやしい(2)</span>
+    }
+    printf("result=%f\n",result);
+    return 0;
+}</pre>
+    <div class="paper">✍️ 紙に「直したscanfの行」と「直した(**)の行」を書いてから開く</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <p><b>バグ1：</b> <code>n</code> は <code>int</code> なのに書式が <code>%lf</code>。→ <code>scanf("%d",&amp;n);</code></p>
+      <p><b>バグ2：</b> <code>1 / i</code> は整数割り算で i≥2 のとき 0。→ <code>1.0 / i</code>（分子を実数に）。</p>
+      <p><b>(**) の書き換え：</b> <code>result += 1.0 / i;</code></p>
+      <div class="explain">
+        <b>print文デバッグの例：</b>ループ内に <code>printf("i=%d result=%f\n", i, result);</code> を入れれば、i=2 以降 result が全く増えていない＝<code>1/i</code> が 0 になっていると気づける。
+      </div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s1_2">
+    <div class="phead"><span class="pno">S1_2</span><span class="badge predict">説明</span><span class="chip topic">オーバーフロー</span></div>
+    <div class="stmt">sum を 2 倍し続けると i=31 で <code>sum=-2147483648</code> という異常値になる。なぜか。また <code>unsigned int</code>＋書式 <code>%u</code> にするとなぜ正常に出るか、扱える最小・最大値の変化とともに説明せよ。</div>
+<pre class="code">int i; int sum=1;
+for(i=1;i&lt;=31;i++){
+    sum=2*sum;
+    printf("i=%d → sum=%d\n",i,sum);
+}</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <div class="explain">
+        <ul>
+          <li><code>int</code> は 32bit の<b>符号付き</b>整数で、範囲は <code>-2^31 〜 2^31-1</code>＝<b>-2147483648 〜 2147483647</b>。</li>
+          <li>sum は倍々で増え、i=30 で <code>2^30=1073741824</code>。i=31 で <code>2^31=2147483648</code> になろうとするが、これは最大値を1超える。符号ビットに繰り上がり、<b>最小値 -2147483648 に一周（オーバーフロー）</b>する。</li>
+          <li><code>unsigned int</code> は<b>符号ビットが無い</b>ぶん範囲が <code>0 〜 2^32-1</code>＝<b>0 〜 4294967295</b>。最小値は負なし(0)に、最大値は約2倍に広がる。よって <code>2147483648</code> をそのまま <code>%u</code> で表示できる。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s1_3">
+    <div class="phead"><span class="pno">S1_3</span><span class="badge write">作成</span><span class="chip topic">式・整数演算</span></div>
+    <div class="stmt">給料 pay（15万以上・10の倍数）と外食回数 eatout を入力。①税で10%引かれる ②固定費80000引かれる ③外食は1回5000円。<b>自由に使えるお金 rest</b> を求める1行を補え。</div>
+    <div class="paper">✍️ 「rest = …」の1行を紙に書いてから開く</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答（scanf の直後に追加）</h4>
+<pre class="code">rest = pay - pay/10 - 80000 - 5000*eatout;</pre>
+      <div class="explain"><code>pay</code> は10の倍数なので <code>pay/10</code> は割り切れて誤差なし（＝10%）。<code>pay*9/10</code> でも可。外食は <code>5000*eatout</code>。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s1_4">
+    <div class="phead"><span class="pno">S1_4</span><span class="badge predict">出力予測</span><span class="chip topic">前置/後置</span><span class="badge hard">★</span></div>
+    <div class="stmt">出力を予測せよ（前置・後置インクリメント/デクリメント）。</div>
+<pre class="code">result=10; x1=result++; printf("line1-&gt; x1=%d result=%d\n",x1,result);
+result=10; x2=++result; printf("line2-&gt; x2=%d result=%d\n\n",x2,result);
+result=10; y1=--result; printf("line3-&gt; y1=%d result=%d\n",y1,result);
+result=10; y2=result--; printf("line4-&gt; y2=%d result=%d\n",y2,result);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答（実行で確認済み）</h4>
+      <span class="out">line1-&gt; x1=10 result=11
+line2-&gt; x2=11 result=11
+
+line3-&gt; y1=9 result=9
+line4-&gt; y2=10 result=9</span>
+      <div class="explain">
+        <b>後置</b> <code>result++</code>／<code>result--</code>：<u>今の値を代入してから</u> 1増減。→ x1=10, y2=10。<br>
+        <b>前置</b> <code>++result</code>／<code>--result</code>：<u>先に1増減してから</u>代入。→ x2=11, y1=9。<br>
+        どの行も最後の result は 11 or 9（±1 済み）。
+      </div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s1_567">
+    <div class="phead"><span class="pno">S1_5〜7</span><span class="badge write">発展</span><span class="chip topic">2進変換・多倍長</span><span class="badge hard">★★</span></div>
+    <div class="stmt">案内いわく★★は<b>試験水準超え</b>。時間が無ければ後回しでOK。考え方だけ押さえる：2進数→10進は各桁×2の累乗の和、10進→2進は<code>%2</code>と<code>/2</code>の繰り返し、多倍長は各桁を配列に入れて筆算。</div>
+    <button class="reveal">参考：2進→10進の骨格を見る ▼</button>
+    <div class="solution">
+      <h4>参考コード（S1_5 の一例）</h4>
+<pre class="code">int bin[32], i, n, dec=0, w=1;
+scanf("%d",&amp;n);                <span class="c">// 例: 1011 を int で受ける</span>
+for(i=0; n&gt;0; i++){ bin[i]=n%10; n/=10; }  <span class="c">// 各桁を下位から取り出す</span>
+for(int k=0; k&lt;i; k++){ dec += bin[k]*w; w*=2; } <span class="c">// 2^k を掛けて足す</span>
+printf("%d\n", dec);</pre>
+      <div class="explain">10進→2進(S1_6)は逆に <code>while(n&gt;0){ b[j++]=n%2; n/=2; }</code> で余りを集め、<b>逆順</b>に出す。多倍長(S1_7)は各桁を配列に入れ、下位桁から <code>繰り上がり</code> を持って足す筆算。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <!-- ================================================== -->
+  <!-- 4章 制御(1) 条件分岐 -->
+  <!-- ================================================== -->
+  <h2 class="sec-title" id="ch4a">4章 制御(1) 条件分岐 <span class="pri p1">S2</span></h2>
+  <p class="sec-sub">最頻出。<code>if〜else if〜else</code> の<b>上から順に評価</b>、<code>&amp;&amp;</code>(かつ)と<code>||</code>(または)の違い、そして「<code>&amp;&amp;/||</code> の1文」を「<b>入れ子の if</b>」に書き換える変換が繰り返し出る。</p>
+
+  <div class="miss">
+    <h3>⚠️ 条件分岐の落とし穴</h3>
+    <ul>
+      <li><code>if〜else if</code> は<b>上から順に</b>調べ、<b>最初に真になった1つだけ</b>実行して残りは飛ばす。</li>
+      <li><code>A &amp;&amp; B</code>＝A<b>かつ</b>B（両方真）／<code>A || B</code>＝A<b>または</b>B（どちらか真）。<b>取り違えると常に真</b>になったりする。</li>
+      <li>「範囲内か」は <code>x&gt;=下 &amp;&amp; x&lt;=上</code>（<b>&amp;&amp;</b>）。<code>||</code> にすると全部の値で真になる典型バグ。</li>
+      <li><code>if(A &amp;&amp; B)</code> ⇔ <code>if(A){ if(B){...} }</code>／<code>if(A || B)</code> ⇔ <code>if(A){...} else{ if(B){...} }</code>。</li>
+    </ul>
+  </div>
+
+  <div class="problem" data-id="s2_1">
+    <div class="phead"><span class="pno">S2_1</span><span class="badge predict">出力予測</span><span class="chip topic">if〜else if</span></div>
+    <div class="stmt">入力が <b>50 / 65 / 80 / 110</b> のときの各出力を答えよ。</div>
+<pre class="code">if( score &gt; 100 || score &lt; 0 )   printf(" invalid number \n");
+else if( score &gt;= 80 )           printf(" excellent \n");
+else if( score &gt;= 70 )           printf(" good \n");
+else if( score &gt;= 60 )           printf(" fair \n");
+else                             printf(" no good \n");</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答（実行で確認済み）</h4>
+      <span class="out">50  →  no good
+65  →  fair
+80  →  excellent
+110 →  invalid number</span>
+      <div class="explain">上から順に判定。65 は 80未満・70未満だが60以上 → <code>fair</code>。80 は最初の80以上で <code>excellent</code>（good以降は飛ばす）。110 は範囲外で <code>invalid</code>。50 はどれも該当せず else の <code>no good</code>。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s2_2">
+    <div class="phead"><span class="pno">S2_2</span><span class="badge write">バグ考察</span><span class="chip topic">&amp;&amp; と ||</span></div>
+    <div class="stmt">文字を大文字/小文字/数字/その他に判別したいが、正しく動かない。<b>理由</b>を述べ、直せ。（<code>diff = 'f'-'F' = 32</code>、<code>a='a'</code>, <code>z='z'</code>）</div>
+<pre class="code">if(input &gt;= a - diff <span class="b">||</span> input &lt;= z - diff){ printf("英字大文字です\n"); }
+else if(input &gt;= a <span class="b">||</span> input &lt;= z ){         printf("英字小文字です\n"); }
+else if(input &gt;= '0' <span class="b">||</span> input &lt;= '9'){       printf("数字です\n"); }
+else{ printf("英数字以外です\n"); }</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <div class="explain">
+        <b>理由：</b>「範囲内」は「下限以上 <u>かつ</u> 上限以下」なのに、すべて <code>||</code>（または）で書いている。<code>||</code> だと例えば1つ目は「'A'以上 <u>または</u> 'Z'以下」となり、<b>どんな文字でもほぼ必ず真</b>（'Z'以下 or 'A'以上のどちらかは必ず成立）。よって最初の枝にすべて吸い込まれてしまう。<br>
+        <b>修正：</b>すべて <code>&amp;&amp;</code> に直す。<code>a-diff='A'</code>, <code>z-diff='Z'</code>。
+      </div>
+<pre class="code">if(input &gt;= a-diff <span class="b">&amp;&amp;</span> input &lt;= z-diff)  printf("英字大文字です\n");
+else if(input &gt;= a <span class="b">&amp;&amp;</span> input &lt;= z)        printf("英字小文字です\n");
+else if(input &gt;= '0' <span class="b">&amp;&amp;</span> input &lt;= '9')    printf("数字です\n");
+else printf("英数字以外です\n");</pre>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s2_3">
+    <div class="phead"><span class="pno">S2_3</span><span class="badge write">バグ修正</span><span class="chip topic">入れ子if</span></div>
+    <div class="stmt">「2/5の倍数」を判定し、該当メッセージを<b>「のみ」</b>表示したい。次のコードは意図通りか？ 正しければ 4/7/10 の出力を、誤りなら箇所を指摘し修正コードを書け（論理演算子は使わない）。</div>
+<pre class="code">if(x % 2 == 0){
+    printf("2の倍数です\n");           <span class="c">// ← ここが常に出てしまう</span>
+    if( x % 5 == 0 ) printf("2と5の倍数です\n");
+}
+else{
+    if( x % 5 == 0 ) printf("5の倍数です\n");
+    else printf("2と5どちらの倍数でもないです\n");
+}</pre>
+    <div class="paper">✍️ 修正版を紙に書いてから開く</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答：誤り</h4>
+      <div class="explain">x が2と5<b>両方</b>の倍数（例 10）のとき、「2の倍数です」と「2と5の倍数です」の<b>2行</b>が出てしまい「のみ」に反する。<code>2の倍数です</code> を <b>else 側</b>に移す。</div>
+<pre class="code">if(x % 2 == 0){
+    if( x % 5 == 0 ) printf("2と5の倍数です\n");
+    else             printf("2の倍数です\n");
+}
+else{
+    if( x % 5 == 0 ) printf("5の倍数です\n");
+    else             printf("2と5どちらの倍数でもないです\n");
+}</pre>
+      <h4>修正版での 4/7/10 の出力</h4>
+      <span class="out">4  →  2の倍数です
+7  →  2と5どちらの倍数でもないです
+10 →  2と5の倍数です</span>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s2_4">
+    <div class="phead"><span class="pno">S2_4</span><span class="badge write">空欄補充</span><span class="chip topic">&amp;&amp; → 入れ子</span></div>
+    <div class="stmt"><code>if(x%4==0 &amp;&amp; x&gt;30)</code> と同じ動作になるよう、入れ子版の①②を埋めよ。</div>
+<pre class="code">if(   <span class="b">①</span>   ){
+    if(   <span class="b">②</span>   ) printf("OK\n");
+    else               printf("NG\n");
+}
+else printf("NG\n");</pre>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <div class="explain">① <code>x % 4 == 0</code> ／ ② <code>x &gt; 30</code><br>
+      <code>A &amp;&amp; B</code>（両方真でOK）は「A を確かめ、真ならさらに B を確かめる」入れ子。① と ② は入れ替えても可。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s2_5">
+    <div class="phead"><span class="pno">S2_5</span><span class="badge write">空欄補充</span><span class="chip topic">|| → 入れ子</span></div>
+    <div class="stmt"><code>if(x%4==0 || x&gt;30)</code> と同じ動作になるよう、入れ子版の①②を埋めよ。</div>
+<pre class="code">if(   <span class="b">①</span>   ) printf("OK\n");
+else{
+    if(   <span class="b">②</span>   ) printf("OK\n");
+    else               printf("NG\n");
+}</pre>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <div class="explain">① <code>x % 4 == 0</code> ／ ② <code>x &gt; 30</code><br>
+      <code>A || B</code>（どちらか真でOK）は「A が真なら即OK、<b>偽なら else で</b> B を確かめる」入れ子。① と ② は入れ替え可。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s2_6">
+    <div class="phead"><span class="pno">S2_6</span><span class="badge write">空欄補充</span><span class="chip topic">複合条件→入れ子</span><span class="badge hard">★</span></div>
+    <div class="stmt"><code>if( (x%2==0 &amp;&amp; x%4!=0) || (x%6!=0 &amp;&amp; x%8==0) )</code> と同じ動作の入れ子版。①〜④を埋めよ。</div>
+<pre class="code">if( <span class="b">①</span> ){
+    if( <span class="b">②</span> ){ printf("OK\n"); }
+    else{
+        if( <span class="b">③</span> ){
+            if( <span class="b">④</span> ){ printf("OK\n"); }
+            else{ printf("NG\n"); }
+        }
+        else{ printf("NG\n"); }
+    }
+}
+else{ printf("NG\n"); }</pre>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（全数一致を実行で確認済み）</h4>
+      <div class="explain">
+        ① <code>x % 2 == 0</code> ／ ② <code>x % 4 != 0</code> ／ ③ <code>x % 6 != 0</code> ／ ④ <code>x % 8 == 0</code>
+      </div>
+      <p><b>なぜこの順？</b> 2つの AND 項はどちらも「x は偶数」を含む（<code>x%8==0</code>→x は偶数）。だから外枠①で <code>x%2==0</code> を共通の門にできる。門を通ったら「<code>x%4!=0</code> なら即OK（1つ目の項）、そうでなければ <code>x%6!=0 かつ x%8==0</code>（2つ目の項）」を入れ子で確かめる形。</p>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s2_7">
+    <div class="phead"><span class="pno">S2_7</span><span class="badge write">空欄補充</span><span class="chip topic">うるう年</span><span class="badge hard">★</span></div>
+    <div class="stmt">うるう年判定：4で割り切れる→うるう年、ただし100で割り切れる→違う、ただし400で割り切れる→うるう年。入れ子版①〜③と、1文版④を埋めよ。</div>
+<pre class="code"><span class="c">// sample7_1（入れ子）</span>
+if( <span class="b">①</span> )  printf("うるう年です\n");
+else{
+    if( <span class="b">②</span> )  printf("うるう年ではないです\n");
+    else{
+        if( <span class="b">③</span> )  printf("うるう年です\n");
+        else               printf("うるう年ではないです\n");
+    }
+}
+<span class="c">// sample7_2（1文）</span>
+if( <span class="b">④</span> )  printf("うるう年です\n");
+else       printf("うるう年ではないです\n");</pre>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（1〜3000年で全数一致を確認済み）</h4>
+      <div class="explain">
+        ① <code>y % 400 == 0</code> ／ ② <code>y % 100 == 0</code> ／ ③ <code>y % 4 == 0</code><br>
+        ④ <code>(y % 4 == 0 &amp;&amp; y % 100 != 0) || y % 400 == 0</code>
+      </div>
+      <p>入れ子版は<b>例外の強い順</b>（400→100→4）に調べるのがコツ。400で割れれば無条件うるう年、次に100で割れれば例外で非うるう年、次に4で割れればうるう年、それ以外は非うるう年。</p>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <!-- ================================================== -->
+  <!-- 4章 制御(2) ループ -->
+  <!-- ================================================== -->
+  <h2 class="sec-title" id="ch4b">4章 制御(2) ループ <span class="pri p1">S3</span></h2>
+  <p class="sec-sub"><code>for</code>/<code>while</code> を<b>1周ずつ手で追う</b>のが本番。ループ回数、2重ループ、そして「for のヘッダ(初期化・条件・更新)を埋める」問題が主役。</p>
+
+  <div class="cheat">
+    <h3>🪙 ループの反射</h3>
+    <ul>
+      <li>回数固定 <code>for(i=0; i&lt;n; i++)</code> は <b>n 回</b>回る（i=0..n-1）。<code>i=1; i&lt;=n</code> なら i=1..n の n 回。</li>
+      <li>2重ループで<b>重複しないペア</b>は内側を <code>for(j=i+1; j&lt;=上限; j++)</code>。</li>
+      <li>「終わったとき i がいくつか」を聞く問題は、<b>条件が偽になった瞬間</b>の i を答える（そこで i++ 済みか要確認）。</li>
+    </ul>
+  </div>
+
+  <div class="problem" data-id="s3_1">
+    <div class="phead"><span class="pno">S3_1</span><span class="badge write">空欄補充</span><span class="chip topic">for・表出力</span></div>
+    <div class="stmt">1〜10 の値とその2乗を表形式で出す。for のヘッダと printf の引数を埋めよ。</div>
+<pre class="code">for( i = 0; <span class="b">________</span> )
+    printf(" %d   %d \n", <span class="b">________</span> );</pre>
+    <div class="paper">✍️ 紙に for 行と printf 行を書いてから開く</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（どちらでも可）</h4>
+<pre class="code"><span class="c">// i=0 スタートを活かすなら</span>
+for( i = 0; i &lt; 10; i++ )
+    printf(" %d   %d \n", i+1, (i+1)*(i+1) );
+
+<span class="c">// 素直に i=1 から回すなら</span>
+for( i = 1; i &lt;= 10; i++ )
+    printf(" %d   %d \n", i, i*i );</pre>
+      <div class="explain">値は <code>i</code>、2乗は <code>i*i</code>。10個出したいので回数は10回。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s3_2">
+    <div class="phead"><span class="pno">S3_2</span><span class="badge write">空欄補充</span><span class="chip topic">追い越し・for条件</span></div>
+    <div class="stmt">A君70m/分、B君100m/分。A君が min 分先に出発。B君が<b>初めて完全に追い越す</b>のは何分後か。差を初期化する行と for の条件を埋めよ（本体は <code>distance -= (100-70);</code>）。</div>
+<pre class="code">scanf("%d",&amp;min);
+<span class="b">________</span>                        <span class="c">// distance の初期化</span>
+for( i = 0; <span class="b">________</span> ; i++ ){
+    distance = distance - ( 100 - 70 );
+}
+printf("B君は %d 分後にはA君を追い越しています\n", i);</pre>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">distance = 70 * min;               <span class="c">// A君の先行距離</span>
+for( i = 0; distance &gt;= 0; i++ ){
+    distance = distance - ( 100 - 70 );
+}</pre>
+      <div class="explain">最初の差は「A君が min 分×70m/分 進んだぶん」＝<code>70*min</code>。B君は毎分 <code>100-70=30m</code> ずつ差を詰める。差が負（B君が前）になった瞬間ループを抜け、その時の <code>i</code> が答え。<br>
+      <b>検算：</b>min=1 → 先行70m、70/30 で3分後に追い越し → 出力 <b>3</b>（実行確認済み）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s3_3">
+    <div class="phead"><span class="pno">S3_3</span><span class="badge predict">出力予測</span><span class="chip topic">while・for回数</span></div>
+    <div class="stmt">出力（i と k）を求めよ。</div>
+<pre class="code">int i=0,j,k; int a=1;
+while( a &lt; 10000 ){ a = a*10; i++; }
+printf("i = %d\n", i);
+k=0;
+for( j=i; j&lt;10; j++ ){ k++; }
+printf("k = %d\n", k);</pre>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（実行で確認済み）</h4>
+      <span class="out">i = 4
+k = 6</span>
+      <div class="explain">
+        while：a=1→10(i=1)→100(i=2)→1000(i=3)→10000(i=4)。ここで <code>a&lt;10000</code> が偽になり終了。<b>i=4</b>。<br>
+        for：<code>j=4</code> から <code>j&lt;10</code> まで＝ j=4,5,6,7,8,9 の<b>6回</b>。k=6。
+      </div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s3_4">
+    <div class="phead"><span class="pno">S3_4</span><span class="badge write">空欄補充</span><span class="chip topic">for本体・条件分岐</span></div>
+    <div class="stmt">毎年、残高÷500 の利息が付く。ただし経過年数が3で割り切れる年は 残高÷100 に変わる。20年後まで残高を表示。for の本体を埋めよ。</div>
+<pre class="code">zan = init;
+for( i = 1; i &lt; 20; i++){
+    <span class="b">________</span>               <span class="c">// 利息を残高に加える</span>
+    printf("%d 年後の預金残高は %d 円です\n", i, zan );
+}</pre>
+    <div class="paper">✍️ if〜else で利息を分岐する数行を紙に</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">if( i % 3 == 0 )  zan = zan + zan/100;   <span class="c">// 3の倍数年は 1/100</span>
+else              zan = zan + zan/500;   <span class="c">// それ以外は 1/500</span></pre>
+      <div class="explain"><code>zan += zan/100;</code> のように複合代入でも可。ポイントは「<b>年 i が3で割り切れるか</b>」で利息の分母を切り替えること。整数割り算なので端数は切り捨て（＝商）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s3_5">
+    <div class="phead"><span class="pno">S3_5</span><span class="badge write">作成</span><span class="chip topic">2重ループ・実数</span></div>
+    <div class="stmt">1≦a≦5, 1≦b≦10 の全組合せで <code>ax-b=0</code> の解 <code>x=b/a</code> を出力（表示例は <code>1.000000</code> 形式）。2重 for で完成させよ。</div>
+    <div class="paper">✍️ 外ループ a、内ループ b、sol の計算を紙に</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">for( a = 1; a &lt;= 5; a++ ){
+    for( b = 1; b &lt;= 10; b++ ){
+        sol = (double)b / a;          <span class="c">// 実数の割り算にする</span>
+        printf("%dx-%d=0 の解は %f\n", a, b, sol);
+    }
+}</pre>
+      <div class="explain"><code>sol</code> は <code>double</code>。<b>整数割り算にしない</b>のが肝：<code>b/a</code> のままだと切り捨てられるので、<code>(double)b/a</code> か <code>1.0*b/a</code>。表示は <code>%f</code>（既定で小数6桁）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s3_6">
+    <div class="phead"><span class="pno">S3_6</span><span class="badge write">作成</span><span class="chip topic">2重ループ・組合せ</span></div>
+    <div class="stmt"><code>i &lt; j</code> を満たす (i,j) を <code>(1,2)…(5,6)</code> の順に全て出力（1≦i&lt;j≦6）。2重 for で完成させよ。</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">for( i = 1; i &lt;= 5; i++ ){
+    for( j = i+1; j &lt;= 6; j++ ){
+        printf("(%d, %d)\n", i, j);
+    }
+}</pre>
+      <div class="explain">重複しないペアの定石：<b>内側 j を <code>i+1</code> から</b>回すと自動的に <code>i&lt;j</code> になり、(2,1) のような逆順や (1,1) が出ない。i は最大5（j=6 と組めるのは i=5 まで）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <!-- ================================================== -->
+  <!-- 5章 関数 -->
+  <!-- ================================================== -->
+  <h2 class="sec-title" id="ch5">5章 関数 <span class="pri p1">S4</span></h2>
+  <p class="sec-sub"><b>プロトタイプ宣言・引数・戻り値</b>の3点セット。関数を「呼ぶ側」と「作る側」を両方書けること、配列を引数に取る関数を追えることが問われる。</p>
+
+  <div class="cheat">
+    <h3>🪙 関数の型（これを丸暗記）</h3>
+    <ul>
+      <li>宣言（main の前）：<code>int sum(int, int);</code>（引数の型だけでOK、末尾 <b>;</b>）</li>
+      <li>定義：<code>int sum(int a, int b){ return a+b; }</code>（<b>戻り値の型・return</b>を忘れない）</li>
+      <li>呼び出し：<code>ans = sum(x, y);</code></li>
+      <li>配列を渡す：定義 <code>int f(int a[])</code>、呼び出し <code>f(arr)</code>（<b>&amp; も [] も付けない</b>）</li>
+    </ul>
+  </div>
+
+  <div class="problem" data-id="s4_1">
+    <div class="phead"><span class="pno">S4_1</span><span class="badge write">作成</span><span class="chip topic">関数・戻り値</span></div>
+    <div class="stmt">点数が60以上ならそのまま、60未満なら0を返す関数 <code>score_comp</code> を作り、main で呼んで最終成績を出す。main の呼び出し1行と関数本体を埋めよ。</div>
+    <div class="paper">✍️ main の「final = …」と、関数の if〜else を紙に</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code"><span class="c">// main の中（scanf の後）</span>
+final = score_comp(score);
+
+<span class="c">// 関数定義</span>
+int score_comp( int score ){
+    int result;
+    if( score &gt;= 60 )  result = score;
+    else               result = 0;
+    return result;
+}</pre>
+      <div class="explain">引数で受けた <code>score</code> を判定して <code>result</code> に入れ、<code>return result;</code>。<code>return (score&gt;=60) ? score : 0;</code> と1行でも可。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s4_2">
+    <div class="phead"><span class="pno">S4_2</span><span class="badge predict">出力予測</span><span class="chip topic">配列引数・番兵</span></div>
+    <div class="stmt">配列 <code>{3,9,18,2,14,6,-1}</code> に対し、<code>-1</code> の手前までを合計する <code>sum</code> と個数を数える <code>count</code>。出力（count, sum）を答えよ。</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（実行で確認済み）</h4>
+      <span class="out">count = 6, sum = 52</span>
+      <div class="explain"><code>-1</code> は「ここで終わり」の目印（番兵）。合計は <code>3+9+18+2+14+6 = 52</code>、要素数は <b>6</b>。printf は <code>"count = %d, sum = %d"</code> の順（<code>a_count, a_sum</code> の順に渡している）なので <b>count が先</b>。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s4_3">
+    <div class="phead"><span class="pno">S4_3</span><span class="badge write">作成</span><span class="chip topic">プロトタイプ・関数定義</span></div>
+    <div class="stmt">2整数 x,y の和 <code>sum</code>・積 <code>product</code> を関数で計算。<b>プロトタイプ宣言</b>と2つの関数定義を書け。</div>
+    <div class="paper">✍️ 宣言2行＋関数2つを紙に</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code"><span class="c">/* プロトタイプ宣言（main の前） */</span>
+int sum(int, int);
+int product(int, int);
+
+<span class="c">/* 和 */</span>
+int sum( int a, int b ){
+    return a + b;
+}
+<span class="c">/* 積 */</span>
+int product( int a, int b ){
+    return a * b;
+}</pre>
+      <div class="explain">呼び出し側は <code>sum(x,y)</code>・<code>product(x,y)</code> を直接 printf の引数にしている。関数は必ず <b>戻り値の型 + return</b>。宣言を忘れると「暗黙の宣言」で警告/エラーになる。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s4_4">
+    <div class="phead"><span class="pno">S4_4</span><span class="badge write">作成</span><span class="chip topic">複数関数</span><span class="badge hard">★</span></div>
+    <div class="stmt">1円=0.013ドル=0.009ユーロ=0.082元。円を各通貨に変換する関数を作り、入力金額を変換して表示。</div>
+    <button class="reveal">参考解答を見る ▼</button>
+    <div class="solution">
+      <h4>参考解答</h4>
+<pre class="code">int dollar(int yen){ return yen * 0.013; }
+int euro(int yen){   return yen * 0.009; }
+int gen(int yen){    return yen * 0.082; }
+
+int main(void){
+    int yen;
+    printf("金額(円)&gt;&gt;"); scanf("%d",&amp;yen);
+    printf("%d ドル\n", dollar(yen));
+    printf("%d ユーロ\n", euro(yen));
+    printf("%d 元\n", gen(yen));
+    return 0;
+}</pre>
+      <div class="explain">戻り値が <code>int</code> なので小数点以下は切り捨て。3関数とも「引数 yen を受け取りレートを掛けて return」の同じ型。プロトタイプ宣言も忘れずに（main の前に3行）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s4_5">
+    <div class="phead"><span class="pno">S4_5</span><span class="badge write">空欄補充</span><span class="chip topic">関数の組合せ</span><span class="badge hard">★★</span></div>
+    <div class="stmt">nPr, nCr, nΠr, nHr の一覧表を作るプログラム。空欄[ア]〜[ケ]と、書式・int階乗の問いに答えよ。（★★だが穴埋めは論理が素直なので狙い目）</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（n=15 の表が例と完全一致するのを実行で確認済み）</h4>
+<pre class="code">[ア] プロトタイプ宣言（5関数）:
+    double calculate_factorial(int);
+    double calculate_permutation(int, int);
+    double calculate_combination(int, int);
+    double calculate_repeated_permutation(int, int);
+    double calculate_homogeneous_product(int, int);
+
+[イ] scanf("%d", &amp;n);
+[ウ] calculate_permutation(n, i)            <span class="c">// nPr</span>
+[エ] calculate_combination(n, i)            <span class="c">// nCr</span>
+[オ] calculate_repeated_permutation(n, i)   <span class="c">// nΠr</span>
+[カ] calculate_homogeneous_product(n, i)    <span class="c">// nHr</span>
+
+[キ] 順列  : return calculate_factorial(n) / calculate_factorial(n-r);
+[ク] 組合せ: return calculate_permutation(n, r) / calculate_factorial(r);
+[ケ] 重複組合せ: return calculate_combination(n+r-1, r);</pre>
+      <div class="explain">
+        <b>書式の問い：</b><code>%3d</code> に 24 → 幅3で右詰め＝<code>" 24"</code>（先頭に空白1つ）。<code>%7.5f</code> に 2.2360679 → 小数5桁で <code>2.23607</code>（ちょうど7文字）。<br>
+        <b>int 階乗が n≦12 までしか正しくない理由：</b><code>int</code> は最大 2147483647。<code>13! = 6227020800</code> がこれを超えて<b>オーバーフロー</b>するため。だから本問は <code>double</code> で階乗を持っている。
+      </div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <!-- ================================================== -->
+  <!-- 6章 配列 -->
+  <!-- ================================================== -->
+  <h2 class="sec-title" id="ch6">6章 配列 <span class="pri p3">S5</span></h2>
+  <p class="sec-sub">1次元・2次元配列、添字の <code>i-1</code> オフセット、<code>#define</code> マクロ定数、2次元のトレース。<b>添字を1つずつ手で追う</b>のが基本。</p>
+
+  <div class="cheat">
+    <h3>🪙 配列の反射</h3>
+    <ul>
+      <li>宣言 <code>int a[N];</code> の添字は <b>0 〜 N-1</b>。「n番目」を <code>a[n-1]</code> で表すオフセットに注意。</li>
+      <li><code>scanf</code> で配列要素に入れるのは <code>scanf("%d", &amp;a[i]);</code>（<b>&amp; 必要</b>）。</li>
+      <li>2次元 <code>a[i][j]</code>：i が行、j が列。対角成分は <code>a[0][0], a[1][1], …</code>。</li>
+      <li><code>#define N 5</code> は「N を 5 に置き換える」だけ。サイズもループ上限も <b>N に統一</b>すれば1箇所で変えられる。</li>
+    </ul>
+  </div>
+
+  <div class="problem" data-id="s5_1">
+    <div class="phead"><span class="pno">S5_1</span><span class="badge predict">出力予測</span><span class="chip topic">添字・範囲チェック</span></div>
+    <div class="stmt"><code>tray[]={15,200,18,55,30}</code>。入力 i で在庫を表示。入力によって出力がどう変わるか。</div>
+<pre class="code">if( ( i &lt;= 0 ) || ( i &gt; 5) )
+    printf(" 1 から 5 までの数字を入力して下さい\n");
+else
+    printf(" %d 個の在庫があります\n", tray[i-1] );</pre>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <div class="explain">
+        i が <b>1〜5</b> のとき <code>tray[i-1]</code> の在庫を表示：<br>
+        1→<code>15個</code>, 2→<code>200個</code>, 3→<code>18個</code>, 4→<code>55個</code>, 5→<code>30個</code>。<br>
+        i が <b>0以下 または 6以上</b>のときは <code>1 から 5 までの数字を入力して下さい</code>。<br>
+        <b>ポイント：</b>「i 番目」を <code>tray[i-1]</code> と1ずらして参照。範囲外アクセスを <code>||</code> のガードで防いでいる。
+      </div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s5_2">
+    <div class="phead"><span class="pno">S5_2</span><span class="badge predict">出力予測</span><span class="chip topic">配列・偶奇</span></div>
+    <div class="stmt"><code>array[i]=i</code>、i が偶数なら <code>bias[i]=1</code>・奇数なら <code>-1</code>。<code>array[i]+bias[i]</code> を出力。全出力を答えよ。</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（実行で確認済み）</h4>
+      <span class="out"> 0  1
+ 1  0
+ 2  3
+ 3  2
+ 4  5
+ 5  4
+ 6  7
+ 7  6
+ 8  9
+ 9  8 </span>
+      <div class="explain">偶数 i は <code>i+1</code>、奇数 i は <code>i-1</code>。＝ 偶数と奇数のペアが値を交換したように見える（0↔1, 2↔3, …）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s5_3">
+    <div class="phead"><span class="pno">S5_3</span><span class="badge write">作成</span><span class="chip topic">2次元配列・行列</span></div>
+    <div class="stmt">2×2行列 <code>matrix</code> の<b>行列式</b>と<b>トレース</b>（対角和）を計算して出力。2行を補え。</div>
+    <div class="paper">✍️ determinant と trace の式を紙に</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">determinant = matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0];
+trace       = matrix[0][0] + matrix[1][1];</pre>
+      <div class="explain">2×2 の行列式は <code>ad − bc</code>（左上×右下 − 右上×左下）。トレースは対角成分の和 <code>a + d</code>。<br>
+      <b>検算：</b>行列 [[1,2],[3,4]] なら det = 1·4−2·3 = <b>-2</b>、trace = 1+4 = <b>5</b>（実行確認済み）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s5_4">
+    <div class="phead"><span class="pno">S5_4</span><span class="badge write">書き換え</span><span class="chip topic">#define マクロ</span><span class="badge hard">★</span></div>
+    <div class="stmt">「5」直書きのプログラムを、<b>マクロ定数</b>を使い、定数を変えるだけで入力数・表示数が変わる形に書き換えよ。</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（要点：直書きの 5 をすべて N に）</h4>
+<pre class="code">#define N 5           <span class="c">// ← ここを 8 に変えれば 8 列版になる</span>
+
+<span class="c">// main:</span>
+int point[N];
+for(i = 0 ; i &lt; N; i++){ ... setArrayValue(point, i, x); }
+
+<span class="c">// ArrayMax の中も:</span>
+for( i = 0; i &lt; N; i++){ if( max &lt; a[i] ) max = a[i]; }
+
+<span class="c">// print_graph の中も:</span>
+for( j = 0; j &lt; N; j++){ ... }</pre>
+      <div class="explain">コツは「<b>5 という数字が出てくる箇所を漏れなく N に置換</b>」すること（配列サイズ・全ての for の <code>&lt; 5</code>）。1箇所でも 5 のままだと定数を変えたとき破綻する。<code>#define N 8</code> にすれば出力例の8列版になる。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s5_5">
+    <div class="phead"><span class="pno">S5_5</span><span class="badge predict">出力予測</span><span class="chip topic">2次元配列・トレース地獄</span><span class="badge hard">★</span></div>
+    <div class="stmt">3×3配列に対する4段階の変形。<b>4つのブロック</b>の出力を全て示せ。（実は掃き出し法で単位行列になる）</div>
+    <button class="reveal">解答を見る ▼</button>
+    <div class="solution">
+      <h4>解答（実行で確認済み）</h4>
+      <span class="out">1 2 3
+4 5 6
+5 0 5
+
+1 2 3
+0 1 2
+0 1 1
+
+1 0 -1
+0 1 2
+0 0 1
+
+1 0 0
+0 1 0
+0 0 1 </span>
+      <div class="explain">1つずつ <code>a[i][j]</code> を式に代入して追うだけ。式は整数割り算だが<b>すべて割り切れる</b>ように作られている（例：<code>(4-4·1)/(-3)=0</code>）。焦らず<b>列ごと(i=0,1,2)</b>に計算するのがコツ。最終的に<b>単位行列</b>。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="s5_678">
+    <div class="phead"><span class="pno">S5_6〜8</span><span class="badge write">発展</span><span class="chip topic">マインスイーパ・整列</span><span class="badge hard">★★</span></div>
+    <div class="stmt">★★は試験水準超え。S5_7/8 の<b>交換法（バブルソート）</b>だけは頻出なので骨格を覚えておくと安心。</div>
+    <button class="reveal">参考：交換法(バブルソート)の骨格を見る ▼</button>
+    <div class="solution">
+      <h4>参考：昇順ソート（S5_7/8）</h4>
+<pre class="code">char letter[6] = {'b','w','k','z','j','a'};
+int i, j; char tmp;
+for(i = 0; i &lt; 6-1; i++){
+    for(j = 0; j &lt; 6-1-i; j++){
+        if( letter[j] &gt; letter[j+1] ){    <span class="c">// 隣と比べて大きければ交換</span>
+            tmp = letter[j];
+            letter[j] = letter[j+1];
+            letter[j+1] = tmp;
+        }
+    }
+}
+<span class="c">// → a b j k w z の順になる</span></pre>
+      <div class="explain">交換の3行（<code>tmp</code> を経由）は丸暗記。関数化する S5_8 は <code>void sort(int n, int a[])</code> の形にして、比較の <code>if</code> の中に同じ交換を入れる。文字は数として大小比較できる（'a'&lt;'b'&lt;…）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <!-- ============ end ============ -->
+  <h2 class="sec-title" id="end">🏁 直前チェック（試験開始5分前に読む）</h2>
+  <div class="infobox">
+    <h2>落とすと痛い5項目</h2>
+    <ol>
+      <li><b>整数割り算</b>：<code>1/2==0</code>。実数が欲しければ <code>1.0/2</code> か <code>(double)</code>。（S1_1, S3_5）</li>
+      <li><b>scanf の書式と &amp;</b>：int は <code>%d</code>、double は <code>%lf</code>、変数には <code>&amp;</code>。（S1_1）</li>
+      <li><b>&amp;&amp; と ||</b>：範囲内は <code>&amp;&amp;</code>。<code>if(A&amp;&amp;B)</code>↔入れ子、<code>if(A||B)</code>↔else入れ子。（S2_2〜7）</li>
+      <li><b>ループ回数</b>：<code>for(i=0;i&lt;n;i++)</code> は n 回。終了時の i を聞かれたら「条件が偽になった値」。（S3_3）</li>
+      <li><b>関数の3点セット</b>：プロトタイプ宣言・戻り値/return・呼び出し。配列引数は <code>int a[]</code>。（S4_1〜3）</li>
+    </ol>
+    <p style="margin-bottom:0"><b>本番の解き方：</b>出力予測は<u>変数の値を紙に書き出して1行ずつ更新</u>。作成問題は<u>まず型（for/if/関数）の骨格を書いてから中身</u>。落ち着いて手を動かせば取れる問題ばかり。頑張れ！🔥</p>
+  </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var KEY = 'prog2_final_cram_v1';
+  var store = {};
+  try{ store = JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ store = {}; }
+  function save(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+
+  // ---- countdown: 明日の試験（2026-07-21 09:00 を目安）----
+  var target = new Date(2026, 6, 21, 9, 0, 0);
+  var cd = document.getElementById('countdown');
+  function tick(){
+    var now = new Date();
+    var diff = Math.floor((target - now)/1000);
+    if(diff <= 0){ cd.textContent = '🔥 試験本番！実力を出し切れ'; return; }
+    var h = Math.floor(diff/3600), m = Math.floor((diff%3600)/60), s = diff%60;
+    cd.textContent = '⏳ 試験まで ' + h + '時間' + m + '分' + s + '秒';
+  }
+  tick(); setInterval(tick, 1000);
+
+  var fill = document.getElementById('progfill');
+  var ptext = document.getElementById('progtext');
+  function updateProgress(){
+    var probs = document.querySelectorAll('.problem');
+    var ok = 0;
+    probs.forEach(function(p){ var s = store[p.dataset.id]; if(s && s.conf === 'ok') ok++; });
+    var pct = probs.length ? Math.round(ok/probs.length*100) : 0;
+    fill.style.width = pct + '%';
+    ptext.textContent = ok + ' / ' + probs.length + ' 「OK」';
+  }
+
+  document.querySelectorAll('.problem').forEach(function(p){
+    var id = p.dataset.id;
+    var s = store[id] || {};
+    p.querySelectorAll('.conf button').forEach(function(b){
+      if(s.conf === b.dataset.v) b.classList.add('active');
+      b.addEventListener('click', function(){
+        store[id] = store[id] || {};
+        store[id].conf = (store[id].conf === b.dataset.v) ? null : b.dataset.v;
+        p.querySelectorAll('.conf button').forEach(function(x){
+          x.classList.toggle('active', x.dataset.v === store[id].conf);
+        });
+        save(store); updateProgress();
+      });
+    });
+  });
+  updateProgress();
+
+  document.querySelectorAll('.reveal').forEach(function(btn){
+    btn.setAttribute('data-label', btn.textContent);
+    btn.addEventListener('click', function(){
+      var box = btn.parentNode.querySelector('.solution');
+      var open = box.classList.toggle('show');
+      btn.textContent = open ? '解答・解説を隠す ▲' : btn.getAttribute('data-label');
+    });
+  });
+  document.querySelectorAll('.reveal-gotcha').forEach(function(btn){
+    btn.setAttribute('data-label', btn.textContent);
+    btn.addEventListener('click', function(){
+      var box = btn.parentNode.querySelector('.gotcha');
+      var open = box.classList.toggle('show');
+      btn.textContent = open ? '追撃を隠す ▲' : btn.getAttribute('data-label');
+    });
+  });
+
+  document.getElementById('revealAll').addEventListener('click', function(){
+    var anyHidden = [].some.call(document.querySelectorAll('.solution,.gotcha'), function(s){ return !s.classList.contains('show'); });
+    document.querySelectorAll('.solution,.gotcha').forEach(function(s){ s.classList.toggle('show', anyHidden); });
+    document.querySelectorAll('.reveal,.reveal-gotcha').forEach(function(b){
+      b.textContent = anyHidden ? '解答・解説を隠す ▲' : b.getAttribute('data-label');
+    });
+    this.textContent = anyHidden ? '全部の解答を隠す' : '全部の解答を表示';
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if(!confirm('理解度の記録をすべて消去します。よろしいですか？')) return;
+    localStorage.removeItem(KEY);
+    document.querySelectorAll('.conf button').forEach(function(b){ b.classList.remove('active'); });
+    store = {}; updateProgress();
+  });
+
+  var links = [].slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function(a){ var id = a.getAttribute('href').slice(1); map[id] = a; });
+  var sections = [].slice.call(document.querySelectorAll('.sec-title'));
+  if('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(a){ a.classList.remove('active'); });
+          if(map[e.target.id]) map[e.target.id].classList.add('active');
+        }
+      });
+    }, {rootMargin:'-60px 0px -75% 0px', threshold:0});
+    sections.forEach(function(s){ obs.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
