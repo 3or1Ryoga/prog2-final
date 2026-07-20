@@ -922,10 +922,10 @@ for(i = 0; i &lt; 6-1; i++){
     var now = new Date();
     var diff = Math.floor((target - now)/1000);
     if(diff <= 0){ cd.textContent = '🔥 試験本番！実力を出し切れ'; return; }
-    var h = Math.floor(diff/3600), m = Math.floor((diff%3600)/60), s = diff%60;
-    cd.textContent = '⏳ 試験まで ' + h + '時間' + m + '分' + s + '秒';
+    var h = Math.floor(diff/3600), m = Math.floor((diff%3600)/60);
+    cd.textContent = '⏳ 試験まで ' + h + '時間' + m + '分';
   }
-  tick(); setInterval(tick, 1000);
+  tick(); setInterval(tick, 30000);
 
   var fill = document.getElementById('progfill');
   var ptext = document.getElementById('progtext');
