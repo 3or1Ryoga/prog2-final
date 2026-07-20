@@ -148,11 +148,11 @@
     <div class="toc-h">目次（試験範囲：教科書3〜6章）</div>
     <nav class="toc" id="toc">
       <a href="#intro"><span class="dot"></span>使い方＆試験の傾向</a>
-      <a href="#ch3"><span class="dot p2"></span>3章 変数と式 <small>S1</small></a>
-      <a href="#ch4a"><span class="dot p1"></span>4章 制御(1) 条件分岐 <small>S2</small></a>
-      <a href="#ch4b"><span class="dot p1"></span>4章 制御(2) ループ <small>S3</small></a>
-      <a href="#ch5"><span class="dot p1"></span>5章 関数 <small>S4</small></a>
-      <a href="#ch6"><span class="dot p3"></span>6章 配列 <small>S5</small></a>
+      <a href="#ch3"><span class="dot p2"></span>3章 変数と式 <small>S1 +5</small></a>
+      <a href="#ch4a"><span class="dot p1"></span>4章 制御(1) 条件分岐 <small>S2 +4</small></a>
+      <a href="#ch4b"><span class="dot p1"></span>4章 制御(2) ループ <small>S3 +6</small></a>
+      <a href="#ch5"><span class="dot p1"></span>5章 関数 <small>S4 +5</small></a>
+      <a href="#ch6"><span class="dot p3"></span>6章 配列 <small>S5 +6</small></a>
       <a href="#end"><span class="dot"></span>🏁 直前チェック</a>
     </nav>
   </aside>
@@ -308,6 +308,97 @@ for(i=0; n&gt;0; i++){ bin[i]=n%10; n/=10; }  <span class="c">// 各桁を下位
 for(int k=0; k&lt;i; k++){ dec += bin[k]*w; w*=2; } <span class="c">// 2^k を掛けて足す</span>
 printf("%d\n", dec);</pre>
       <div class="explain">10進→2進(S1_6)は逆に <code>while(n&gt;0){ b[j++]=n%2; n/=2; }</code> で余りを集め、<b>逆順</b>に出す。多倍長(S1_7)は各桁を配列に入れ、下位桁から <code>繰り上がり</code> を持って足す筆算。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <p class="sec-sub" style="margin-top:28px;font-weight:800;color:var(--accent-d);border-top:1px dashed var(--line);padding-top:14px">➕ 追加予想（王道パターン・全て実行検証済み）</p>
+
+  <div class="problem" data-id="h1">
+    <div class="phead"><span class="pno">追3-1</span><span class="badge predict">出力予測</span><span class="chip topic">整数割り算・キャスト</span></div>
+    <div class="stmt">出力を予測せよ。<code>int a=7, b=2;</code></div>
+<pre class="code">printf("%d\n", a/b);
+printf("%d\n", a%b);
+printf("%f\n", (double)a/b);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">3
+1
+3.500000</span>
+      <div class="explain"><code>7/2</code> は整数割り算で商 <b>3</b>、<code>7%2</code> は余り <b>1</b>。<code>(double)a/b</code> は<b>片方を実数にする</b>と実数割り算になり <b>3.5</b>。<code>%f</code> は既定で小数6桁。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="h2">
+    <div class="phead"><span class="pno">追3-2</span><span class="badge predict">出力予測</span><span class="chip topic">文字＝数</span></div>
+    <div class="stmt">出力を予測せよ。<code>char c='C';</code>（'A'=65）</div>
+<pre class="code">printf("%c\n", c+1);
+printf("%d\n", c);
+printf("%c\n", 'a'+3);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">D
+67
+d</span>
+      <div class="explain"><code>'C'</code> は 67。<code>c+1</code>=68 を <code>%c</code> で出すと文字 <b>D</b>、<code>%d</code> なら番号 <b>67</b>。<code>'a'</code>=97 なので <code>'a'+3</code>=100=<b>d</b>。<b>文字は数として計算できる</b>のがポイント。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="h3">
+    <div class="phead"><span class="pno">追3-3</span><span class="badge predict">出力予測</span><span class="chip topic">printf 書式</span></div>
+    <div class="stmt">出力を予測せよ（幅・0埋め・小数桁）。<code>[]</code> は桁を見るための枠。</div>
+<pre class="code">printf("[%5d]\n", 42);
+printf("[%-5d]\n", 42);
+printf("[%05d]\n", 42);
+printf("[%.2f]\n", 3.14159);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">[   42]
+[42   ]
+[00042]
+[3.14]</span>
+      <div class="explain"><code>%5d</code>＝幅5で<b>右詰め</b>（空白で埋める）。<code>%-5d</code>＝<b>左詰め</b>。<code>%05d</code>＝<b>0埋め</b>。<code>%.2f</code>＝小数<b>2桁</b>（3.14159→3.14に丸め）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="h4">
+    <div class="phead"><span class="pno">追3-4</span><span class="badge write">作成</span><span class="chip topic">変数の交換(swap)</span></div>
+    <div class="stmt">2つの変数 <code>a=3, b=5</code> の中身を入れ替えて <code>a=5 b=3</code> と出したい。空欄を埋めよ（作業用に <code>int t;</code> を使ってよい）。</div>
+<pre class="code">int a=3, b=5, t;
+________          <span class="c">// ここで a と b を入れ替える</span>
+printf("a=%d b=%d\n", a, b);</pre>
+    <div class="paper">✍️ 3行を紙に書いてから開く</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">t = a;
+a = b;
+b = t;</pre>
+      <div class="explain"><b>一時変数 t に退避</b>してから入れ替えるのが定石。いきなり <code>a=b; b=a;</code> とすると a の元の値が消えて両方 5 になる（＝失敗）。この swap は配列の並び替え(S5_7)でも使う超頻出パターン。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="h5">
+    <div class="phead"><span class="pno">追3-5</span><span class="badge predict">出力予測</span><span class="chip topic">演算子の優先順位・複合代入</span></div>
+    <div class="stmt">出力を予測せよ。</div>
+<pre class="code">int x = 1 + 2 * 3;
+int y = (1 + 2) * 3;
+printf("%d %d\n", x, y);
+int z = 10;  z += 5;  z *= 2;
+printf("%d\n", z);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">7 9
+30</span>
+      <div class="explain"><code>*</code> は <code>+</code> より優先 → <code>1+2*3=7</code>。括弧を付けると <code>(1+2)*3=9</code>。<code>z+=5</code>→15、<code>z*=2</code>→<b>30</b>（複合代入は上から順に適用）。</div>
     </div>
     <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
   </div>
@@ -488,6 +579,76 @@ else       printf("うるう年ではないです\n");</pre>
     <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
   </div>
 
+  <p class="sec-sub" style="margin-top:28px;font-weight:800;color:var(--accent-d);border-top:1px dashed var(--line);padding-top:14px">➕ 追加予想（王道パターン・全て実行検証済み）</p>
+
+  <div class="problem" data-id="j1">
+    <div class="phead"><span class="pno">追4-1</span><span class="badge predict">出力予測</span><span class="chip topic">switch・fall through</span></div>
+    <div class="stmt">出力を予測せよ。<code>n=2</code> のとき。（<code>break</code> が無い枝に注意）</div>
+<pre class="code">switch(n){
+    case 1: printf("one\n");
+    case 2: printf("two\n");
+    case 3: printf("three\n"); break;
+    default: printf("other\n");
+}</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">two
+three</span>
+      <div class="explain"><code>case 2</code> に入るが、そこに <code>break</code> が無いので<b>下の case へ流れ落ちる（fall through）</b>。<code>case 3</code> の <code>three</code> まで出て、<code>break</code> でようやく止まる。<b>break を書き忘れると次々実行される</b>のが switch の罠。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="j2">
+    <div class="phead"><span class="pno">追4-2</span><span class="badge write">作成</span><span class="chip topic">倍数判定(FizzBuzz型)</span></div>
+    <div class="stmt">1〜15を出力するが、3の倍数は <code>Fizz</code>、5の倍数は <code>Buzz</code>、<b>両方の倍数</b>は <code>FizzBuzz</code>、それ以外は数字を出す。for の中身を書け。</div>
+    <div class="paper">✍️ if〜else if の並び順を意識して紙に</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">for(i = 1; i &lt;= 15; i++){
+    if( i % 15 == 0 )      printf("FizzBuzz\n");
+    else if( i % 3 == 0 )  printf("Fizz\n");
+    else if( i % 5 == 0 )  printf("Buzz\n");
+    else                   printf("%d\n", i);
+}</pre>
+      <div class="explain"><b>「両方の倍数（15の倍数）」を必ず先に</b>判定するのが肝。3の倍数を先に書くと、15のとき Fizz で確定してしまい FizzBuzz が出ない。<code>i%3==0 &amp;&amp; i%5==0</code> を <code>i%15==0</code> と書いてもよい。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="j3">
+    <div class="phead"><span class="pno">追4-3</span><span class="badge predict">出力予測</span><span class="chip topic">&amp;&amp; と ||</span></div>
+    <div class="stmt">出力を予測せよ。<code>int a=5, b=0;</code></div>
+<pre class="code">if( a &gt; 0 &amp;&amp; b &gt; 0 )      printf("both\n");
+else if( a &gt; 0 || b &gt; 0 ) printf("one\n");
+else                      printf("none\n");</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">one</span>
+      <div class="explain">1つ目：<code>a&gt;0</code>(真)<b>かつ</b><code>b&gt;0</code>(偽) → 偽。2つ目：<code>a&gt;0</code>(真)<b>または</b>… → 真なので <b>one</b>。<code>&amp;&amp;</code> は両方真、<code>||</code> はどちらか真、を反射で。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="j4">
+    <div class="phead"><span class="pno">追4-4</span><span class="badge predict">出力予測</span><span class="chip topic">三項演算子</span></div>
+    <div class="stmt">出力を予測せよ。<code>int a=8;</code>（<code>条件 ? A : B</code> は「条件が真ならA、偽ならB」）</div>
+<pre class="code">printf("%s\n", (a % 2 == 0) ? "even" : "odd");
+int max = (a &gt; 5) ? a : 5;
+printf("%d\n", max);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">even
+8</span>
+      <div class="explain"><code>8%2==0</code>(真)→ <b>even</b>。<code>8&gt;5</code>(真)→ max は <code>a</code>=<b>8</b>。三項演算子は <code>if〜else</code> を1行で書く形。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
   <!-- ================================================== -->
   <!-- 4章 制御(2) ループ -->
   <!-- ================================================== -->
@@ -621,6 +782,116 @@ else              zan = zan + zan/500;   <span class="c">// それ以外は 1/50
     <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
   </div>
 
+  <p class="sec-sub" style="margin-top:28px;font-weight:800;color:var(--accent-d);border-top:1px dashed var(--line);padding-top:14px">➕ 追加予想（王道パターン・全て実行検証済み）</p>
+
+  <div class="problem" data-id="k1">
+    <div class="phead"><span class="pno">追4-5</span><span class="badge predict">出力予測</span><span class="chip topic">break・continue</span></div>
+    <div class="stmt">出力を予測せよ（<code>continue</code>＝この周を飛ばす／<code>break</code>＝ループを抜ける）。</div>
+<pre class="code">for(i = 1; i &lt;= 10; i++){
+    if( i % 3 == 0 ) continue;
+    if( i &gt; 7 )      break;
+    printf("%d ", i);
+}</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">1 2 4 5 7 </span>
+      <div class="explain">i=3,6 は <code>continue</code> で表示スキップ。i=8 で <code>i&gt;7</code> が真になり <code>break</code> で終了。残る 1,2,4,5,7 が出力。<b>continue は次の周へ、break は完全脱出</b>。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="k2">
+    <div class="phead"><span class="pno">追4-6</span><span class="badge predict">出力予測</span><span class="chip topic">while・累計</span></div>
+    <div class="stmt">出力を予測せよ。</div>
+<pre class="code">int i = 1, sum = 0;
+while( i &lt;= 5 ){
+    sum += i;
+    i++;
+}
+printf("%d\n", sum);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">15</span>
+      <div class="explain"><code>1+2+3+4+5 = 15</code>。<code>sum</code> を 0 に初期化してから足し込む「累計」の基本形。<code>i++</code> を忘れると無限ループになる点も要注意。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="k3">
+    <div class="phead"><span class="pno">追4-7</span><span class="badge predict">出力予測</span><span class="chip topic">do〜while</span></div>
+    <div class="stmt">出力を予測せよ。</div>
+<pre class="code">int i = 5;
+do{
+    printf("%d ", i);
+    i--;
+}while( i &gt; 0 );</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">5 4 3 2 1 </span>
+      <div class="explain"><code>do〜while</code> は<b>先に1回実行してから</b>条件判定。5→1 まで出て、i=0 で条件が偽になり終了。<b>条件が最初から偽でも必ず1回は実行される</b>のが while との違い。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="k4">
+    <div class="phead"><span class="pno">追4-8</span><span class="badge predict">出力予測</span><span class="chip topic">2重ループ・図形</span></div>
+    <div class="stmt">出力を予測せよ（内側ループが <code>i</code> に依存）。</div>
+<pre class="code">for(i = 1; i &lt;= 4; i++){
+    for(j = 1; j &lt;= i; j++) printf("*");
+    printf("\n");
+}</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">*
+**
+***
+****</span>
+      <div class="explain">i 行目は <code>*</code> を i 個。内側の上限が <code>j &lt;= i</code> なので行ごとに増える。<b>2重ループの内側が外側の変数に依存する</b>典型。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="k5">
+    <div class="phead"><span class="pno">追4-9</span><span class="badge write">作成</span><span class="chip topic">階乗</span></div>
+    <div class="stmt">入力 <code>n</code> の階乗 <code>n! = 1×2×…×n</code> を求めて表示。for で計算部分を書け。</div>
+<pre class="code">int n, i, fact = 1;
+scanf("%d", &amp;n);
+________                <span class="c">// fact に n! を求める</span>
+printf("%d! = %d\n", n, fact);</pre>
+    <div class="paper">✍️ for 1行を紙に</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">for(i = 1; i &lt;= n; i++) fact *= i;</pre>
+      <div class="explain"><b><code>fact</code> は必ず 1 で初期化</b>（0だと全部0になる）。<code>fact = fact * i</code> でも同じ。掛け算の累積は初期値1、足し算の累積は初期値0、が鉄則。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="k6">
+    <div class="phead"><span class="pno">追4-10</span><span class="badge predict">出力予測</span><span class="chip topic">フィボナッチ・変数更新</span><span class="badge hard">★</span></div>
+    <div class="stmt">出力を予測せよ（前2つの和を作りながら変数を更新）。</div>
+<pre class="code">int a = 0, b = 1, c, i;
+printf("%d %d ", a, b);
+for(i = 0; i &lt; 5; i++){
+    c = a + b;
+    printf("%d ", c);
+    a = b;
+    b = c;
+}</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">0 1 1 2 3 5 8 </span>
+      <div class="explain">フィボナッチ数列。<code>c=a+b</code> で次の数を作り、<code>a←b, b←c</code> で1つずつ「ずらす」。更新の順番（先に a、次に b）を崩すと壊れる。<b>変数の値を紙に書き出して1周ずつ追う</b>のがコツ。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
   <!-- ================================================== -->
   <!-- 5章 関数 -->
   <!-- ================================================== -->
@@ -744,6 +1015,95 @@ int main(void){
         <b>書式の問い：</b><code>%3d</code> に 24 → 幅3で右詰め＝<code>" 24"</code>（先頭に空白1つ）。<code>%7.5f</code> に 2.2360679 → 小数5桁で <code>2.23607</code>（ちょうど7文字）。<br>
         <b>int 階乗が n≦12 までしか正しくない理由：</b><code>int</code> は最大 2147483647。<code>13! = 6227020800</code> がこれを超えて<b>オーバーフロー</b>するため。だから本問は <code>double</code> で階乗を持っている。
       </div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <p class="sec-sub" style="margin-top:28px;font-weight:800;color:var(--accent-d);border-top:1px dashed var(--line);padding-top:14px">➕ 追加予想（王道パターン・全て実行検証済み）</p>
+
+  <div class="problem" data-id="l2">
+    <div class="phead"><span class="pno">追5-1</span><span class="badge predict">出力予測</span><span class="chip topic">値渡し（超頻出概念）</span><span class="badge hard">★</span></div>
+    <div class="stmt">出力を予測せよ。関数の中で引数を変更したら、呼び出し元の <code>a</code> はどうなる？</div>
+<pre class="code">void addten(int x){ x = x + 10; }
+
+int main(void){
+    int a = 5;
+    addten(a);
+    printf("%d\n", a);
+    return 0;
+}</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">5</span>
+      <div class="explain">C の引数は<b>値渡し（コピーが渡る）</b>。関数内の <code>x</code> は a のコピーで、<code>x</code> を増やしても<b>呼び出し元の <code>a</code> は変わらない</b>。呼び出し元を変えたいなら <code>a = addten(a);</code> のように<b>戻り値で受け取る</b>設計にする。この「値渡し」は試験で狙われやすい概念。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="l1">
+    <div class="phead"><span class="pno">追5-2</span><span class="badge predict">出力予測</span><span class="chip topic">再帰</span><span class="badge hard">★</span></div>
+    <div class="stmt">出力を予測せよ（関数が自分自身を呼ぶ＝再帰）。</div>
+<pre class="code">int fact(int n){
+    if( n &lt;= 1 ) return 1;
+    return n * fact(n-1);
+}
+... printf("%d\n", fact(5));</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">120</span>
+      <div class="explain"><code>fact(5)=5×fact(4)=5×4×fact(3)=…=5×4×3×2×1=<b>120</b></code>。<code>n&lt;=1</code> で 1 を返して<b>止まる（終了条件）</b>のが再帰の要。終了条件が無いと無限に呼び続ける。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="l4">
+    <div class="phead"><span class="pno">追5-3</span><span class="badge predict">出力予測</span><span class="chip topic">関数の入れ子呼び出し</span></div>
+    <div class="stmt">出力を予測せよ。</div>
+<pre class="code">int square(int x){ return x * x; }
+int f(int x){ return square(x) + 1; }
+... printf("%d\n", f(3));</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">10</span>
+      <div class="explain"><code>f(3)=square(3)+1=3×3+1=<b>10</b></code>。関数の戻り値を<b>そのまま別の式・別の関数に渡せる</b>。内側から順に計算する。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="l3">
+    <div class="phead"><span class="pno">追5-4</span><span class="badge write">作成</span><span class="chip topic">関数・分岐</span></div>
+    <div class="stmt">2つの整数のうち<b>大きい方</b>を返す関数 <code>max</code> を作れ（プロトタイプ宣言も）。</div>
+    <div class="paper">✍️ 宣言＋関数定義を紙に</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">int max(int, int);           <span class="c">// プロトタイプ宣言（main の前）</span>
+
+int max(int a, int b){
+    if( a &gt; b ) return a;
+    else        return b;
+}</pre>
+      <div class="explain"><code>return (a&gt;b) ? a : b;</code> と1行でも可。呼び出しは <code>ans = max(x, y);</code>。3つの最大は <code>max(max(x,y), z)</code> と重ねられる。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="l5">
+    <div class="phead"><span class="pno">追5-5</span><span class="badge write">作成</span><span class="chip topic">配列を受け取る関数</span></div>
+    <div class="stmt">要素数 <code>n</code> と配列 <code>a[]</code> を受け取り、<b>平均</b>を <code>double</code> で返す関数 <code>average</code> を作れ。</div>
+    <div class="paper">✍️ 関数定義を紙に（合計→平均の型に注意）</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">double average(int n, int a[]){
+    int i, sum = 0;
+    for(i = 0; i &lt; n; i++) sum += a[i];
+    return (double)sum / n;
+}</pre>
+      <div class="explain">配列は <code>int a[]</code> で受ける（サイズは別引数 <code>n</code> で渡すのが定石）。平均は <b><code>(double)sum / n</code></b> と実数化しないと整数割り算で小数が切れる。呼び出しは <code>average(4, arr)</code>（配列名だけ、<code>&amp;</code> 不要）。</div>
     </div>
     <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
   </div>
@@ -887,6 +1247,103 @@ for(i = 0; i &lt; 6-1; i++){
 }
 <span class="c">// → a b j k w z の順になる</span></pre>
       <div class="explain">交換の3行（<code>tmp</code> を経由）は丸暗記。関数化する S5_8 は <code>void sort(int n, int a[])</code> の形にして、比較の <code>if</code> の中に同じ交換を入れる。文字は数として大小比較できる（'a'&lt;'b'&lt;…）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <p class="sec-sub" style="margin-top:28px;font-weight:800;color:var(--accent-d);border-top:1px dashed var(--line);padding-top:14px">➕ 追加予想（王道パターン・全て実行検証済み）</p>
+
+  <div class="problem" data-id="m1">
+    <div class="phead"><span class="pno">追6-1</span><span class="badge predict">出力予測</span><span class="chip topic">最大値を探す</span></div>
+    <div class="stmt">出力を予測せよ。<code>int a[]={4,9,2,7,5};</code></div>
+<pre class="code">int i, max = a[0];
+for(i = 1; i &lt; 5; i++)
+    if( a[i] &gt; max ) max = a[i];
+printf("%d\n", max);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">9</span>
+      <div class="explain">最大値探しの定石：<b>先頭 <code>a[0]</code> を暫定最大に</b>し、以降と比べて大きければ更新。最小値なら不等号を <code>&lt;</code> にするだけ。この for は「9 が max になった後は更新されない」。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="m2">
+    <div class="phead"><span class="pno">追6-2</span><span class="badge write">作成</span><span class="chip topic">逆順出力</span></div>
+    <div class="stmt"><code>int a[]={1,2,3,4,5};</code> を<b>逆順</b>（<code>5 4 3 2 1</code>）に出力したい。for を書け。</div>
+    <div class="paper">✍️ for 1行を紙に（添字の向きに注意）</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">for(i = 4; i &gt;= 0; i--) printf("%d ", a[i]);</pre>
+      <div class="explain">添字を<b>末尾 4 から 0 まで減らす</b>。要素数5なら最後の添字は <code>5-1=4</code>。<code>i&gt;=0</code>（0を含む）を <code>i&gt;0</code> にすると先頭が抜けるので注意。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="m4">
+    <div class="phead"><span class="pno">追6-3</span><span class="badge write">作成</span><span class="chip topic">条件を数える</span></div>
+    <div class="stmt">配列 <code>a</code>（要素数 n）の中の<b>偶数の個数</b>を数えて <code>cnt</code> に入れたい。for を書け。</div>
+    <div class="paper">✍️ カウンタの初期化と for を紙に</div>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+<pre class="code">int cnt = 0;
+for(i = 0; i &lt; n; i++)
+    if( a[i] % 2 == 0 ) cnt++;</pre>
+      <div class="explain"><b>カウンタは 0 に初期化</b>してから条件に合う要素で <code>cnt++</code>。「合計」なら <code>sum += a[i];</code>、「個数」なら <code>cnt++;</code> と型が違う。奇数なら <code>a[i]%2 != 0</code>。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="m3">
+    <div class="phead"><span class="pno">追6-4</span><span class="badge predict">出力予測</span><span class="chip topic">2次元・行ごとの和</span></div>
+    <div class="stmt">出力を予測せよ。<code>int a[2][3]={{1,2,3},{4,5,6}};</code></div>
+<pre class="code">for(i = 0; i &lt; 2; i++){
+    int s = 0;
+    for(j = 0; j &lt; 3; j++) s += a[i][j];
+    printf("%d\n", s);
+}</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">6
+15</span>
+      <div class="explain">各<b>行</b>の和：0行目 <code>1+2+3=6</code>、1行目 <code>4+5+6=15</code>。<code>s</code> を<b>行ごとに 0 に戻す</b>のがポイント（内側ループの外・外側ループの中で初期化）。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="m6">
+    <div class="phead"><span class="pno">追6-5</span><span class="badge predict">出力予測</span><span class="chip topic">2次元・対角成分</span></div>
+    <div class="stmt">出力を予測せよ。<code>int a[3][3]={{1,2,3},{4,5,6},{7,8,9}};</code></div>
+<pre class="code">int i, d = 0;
+for(i = 0; i &lt; 3; i++) d += a[i][i];
+printf("%d\n", d);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">15</span>
+      <div class="explain"><code>a[i][i]</code> は<b>対角成分</b> <code>a[0][0], a[1][1], a[2][2]</code> = 1, 5, 9 → 和 <b>15</b>（＝トレース）。行番号と列番号が同じ要素、と覚える。</div>
+    </div>
+    <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
+  </div>
+
+  <div class="problem" data-id="m5">
+    <div class="phead"><span class="pno">追6-6</span><span class="badge predict">出力予測</span><span class="chip topic">配列を書き換えながら走査</span><span class="badge hard">★</span></div>
+    <div class="stmt">出力を予測せよ（配列を累積和で上書きする）。<code>int a[]={3,1,4,1,5};</code></div>
+<pre class="code">int i, sum = 0;
+for(i = 0; i &lt; 5; i++){
+    sum += a[i];
+    a[i] = sum;
+}
+for(i = 0; i &lt; 5; i++) printf("%d ", a[i]);</pre>
+    <button class="reveal">解答・解説を見る ▼</button>
+    <div class="solution">
+      <h4>解答</h4>
+      <span class="out">3 4 8 9 14 </span>
+      <div class="explain">各要素を「そこまでの累積和」に置き換える。3 / 3+1=4 / 4+4=8 / 8+1=9 / 9+5=14。<b>配列を1周しながら書き換える</b>問題は、変数 <code>sum</code> の値と <code>a[i]</code> の変化を<b>表にして追う</b>と確実。</div>
     </div>
     <div class="conf"><span class="conf-label">理解度:</span><button data-v="ng">😟 ダメ</button><button data-v="maybe">🤔 あやしい</button><button data-v="ok">😎 OK</button></div>
   </div>
